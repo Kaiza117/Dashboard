@@ -8,6 +8,24 @@ const swaggerUi = require('swagger-ui-express');
 // const swaggerDocument = YAML.parse(file)
 const swaggerJSDoc = require('swagger-jsdoc');
 
+const mysql = require('mysql2')
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'mydb'
+})
+
+connection.connect()
+
+connection.query('SELECT 1 + 1 AS solution', (err, rows, fields) => {
+    if (err) throw err
+  
+    console.log('The solution is: ', rows[0].solution)
+  })
+  
+connection.end()
+
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
