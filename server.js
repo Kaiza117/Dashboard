@@ -16,14 +16,12 @@ const connection = mysql.createConnection({
   database: 'mydb'
 })
 
-connection.connect()
 
-connection.query
 
-  
-   
-  
+app.use( express.json() );
+app.use( express.urlencoded({ extended: true }) );
 
+// const { createUser, getsAll, getUser, update, deleted } = require('./controllers/users.controller.js')
 
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -104,9 +102,11 @@ app.get("/register")
  *        description: OK
 */
 
-app.get("/users/create", (req, res) => {
-    const { name, emailaddress, password } = req;
-    query('INSERT INTO users (name, emailaddress, password) VALUES (?, ?)', [name, emailaddress])
+app.post("/users/create", (req, res) => {
+    const { username, email, password } = req.body;
+    connection.connect()
+    connection.query("INSERT INTO user (username, email, password) VALUES ('sirk117', 'kaizabala@yahoo.com', 'wompwomp')")
+    connection.end()
 });
 
 /**
@@ -123,7 +123,11 @@ app.get("/users/create", (req, res) => {
 */
 
 app.get("/users/get", (req, res) => {
-    query('SELECT * FROM users')
+    connection.connect();
+    connection.query('SELECT * FROM user')
+    console.log('hi')
+    connection.end();
+    return ("hi")
 });
 
 /**
@@ -139,11 +143,9 @@ app.get("/users/get", (req, res) => {
  *        description: OK
 */
 
-app.get("/users/get/{id}", (req, res) => {
-    const id = req.params.id;
-    
-    query('SELECT * FROM users WHERE id = ?')
-});
+// app.get("/users/get/{id}", (req, res) => {
+//     res.json( getUser );
+// });
 
 /**
  * @swagger
@@ -158,11 +160,9 @@ app.get("/users/get/{id}", (req, res) => {
  *        description: OK
 */
 
-app.get("/users/update/{userId}", (req, res) => {
-    const id = req.params.userId;
-    
-    query('UPDATE users SET name = ?, emailaddress = ?, password = ? WHERE id = ?')
-});
+// app.put("/users/update/{userId}", (req, res) => {
+//     res.json( update );
+// });
 
 /**
  * @swagger
@@ -177,11 +177,9 @@ app.get("/users/update/{userId}", (req, res) => {
  *        description: OK
 */
 
-app.get("/users/delete/{userId}", (req, res) => {
-    const id = req.params.userId;
-    
-    query('DELETE FROM users WHERE id = ?')
-});
+// app.delete("/users/delete/{userId}", (req, res) => {
+//     res.json( deleted );
+// });
 
 /**
  * @swagger
@@ -335,7 +333,7 @@ app.get("post/<int:id>")
 
 
 
-connection.end()
+
 
 // this needs to be below the other code blocks
 app.listen( port, () => console.log(`Listening on port: ${port}`) );
