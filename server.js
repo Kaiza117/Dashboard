@@ -18,13 +18,12 @@ const connection = mysql.createConnection({
 
 connection.connect()
 
-connection.query('SELECT 1 + 1 AS solution', (err, rows, fields) => {
-    if (err) throw err
+connection.query
+
   
-    console.log('The solution is: ', rows[0].solution)
-  })
+   
   
-connection.end()
+
 
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -91,6 +90,98 @@ app.get("/login")
 */
 
 app.get("/register")
+
+/**
+ * @swagger
+ * /users/create:
+ *   get:
+ *     summary: creates a user
+ *     description: creates a user
+ *     produces: 
+ *      - application/json
+ *     responses:
+ *       200:
+ *        description: OK
+*/
+
+app.get("/users/create", (req, res) => {
+    const { name, emailaddress, password } = req;
+    query('INSERT INTO users (name, emailaddress, password) VALUES (?, ?)', [name, emailaddress])
+});
+
+/**
+ * @swagger
+ * /users/get:
+ *   get:
+ *     summary: returns all users
+ *     description: returns all users
+ *     produces: 
+ *      - application/json
+ *     responses:
+ *       200:
+ *        description: OK
+*/
+
+app.get("/users/get", (req, res) => {
+    query('SELECT * FROM users')
+});
+
+/**
+ * @swagger
+ * /users/get/{id}:
+ *   get:
+ *     summary: returns a specific user
+ *     description: returns a specific user
+ *     produces: 
+ *      - application/json
+ *     responses:
+ *       200:
+ *        description: OK
+*/
+
+app.get("/users/get/{id}", (req, res) => {
+    const id = req.params.id;
+    
+    query('SELECT * FROM users WHERE id = ?')
+});
+
+/**
+ * @swagger
+ * /users/update/{userId}:
+ *   get:
+ *     summary: updates a specific user
+ *     description: updates a specific user
+ *     produces: 
+ *      - application/json
+ *     responses:
+ *       200:
+ *        description: OK
+*/
+
+app.get("/users/update/{userId}", (req, res) => {
+    const id = req.params.userId;
+    
+    query('UPDATE users SET name = ?, emailaddress = ?, password = ? WHERE id = ?')
+});
+
+/**
+ * @swagger
+ * /users/delete/{userId}:
+ *   get:
+ *     summary: deletes a specific user
+ *     description: deletes a specific user
+ *     produces: 
+ *      - application/json
+ *     responses:
+ *       200:
+ *        description: OK
+*/
+
+app.get("/users/delete/{userId}", (req, res) => {
+    const id = req.params.userId;
+    
+    query('DELETE FROM users WHERE id = ?')
+});
 
 /**
  * @swagger
@@ -243,6 +334,8 @@ app.get("/logout")
 app.get("post/<int:id>")
 
 
+
+connection.end()
 
 // this needs to be below the other code blocks
 app.listen( port, () => console.log(`Listening on port: ${port}`) );
